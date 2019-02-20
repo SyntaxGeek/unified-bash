@@ -1,0 +1,68 @@
+# ---------------
+# readme
+# ---------------
+#
+#  .------------------------------------------------------------------------.
+#  | Describe the non-inuitive command prefixes below                       |
+#  .----------------.-------------------------------------------------------.
+#  | command prefix | desc                                                  |
+#  .----------------+-------------------------------------------------------.
+#  | show           | show output to stdout                                 |
+#  | open           | open output for editing                               |
+#  | go             | move contextual position                              |
+#  | exec           | launch exes                                           |
+#  | check          | exec checkup procedures                               |
+#  | clean          | exec cleanup procedures                               |
+#  '----------------'-------------------------------------------------------'
+#
+# ---------------
+
+#######
+# brew
+#######
+alias add-brew='ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
+alias add-package-brew='brew install '
+alias show-packages-brew='brew list --versions'
+alias check-brew='brew doctor'
+alias clean-brew='brew cleanup'
+alias upgrade-brew='brew update'
+alias upgrade-package-brew='brew upgrade '
+alias show-version-brew='brew --version'
+
+#######
+# dotnet
+#######
+alias build-dotnet='dotnet build '
+
+#######
+# git
+#######
+alias show-branches-git='git branch -a'
+alias show-version-git='git --version'
+alias show-status-git='git status'
+alias show-log-git='git log'
+alias add-allFiles-git='git add .'
+alias add-modifiedFiles-git='git add -u'
+alias add-commit-git='git commit -m'
+alias add-repo-git='git clone '
+
+#######
+# http
+#######
+show-debug-http () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
+
+#######
+# python/pip
+#######
+alias activate-env-pip3='source venv/bin/activate'
+alias add-env-pip3='virtualenv venv --distribute'
+alias add-globalEnv-pip3='virtualenv venv --distribute --system-site-packages'
+alias add-package-pip3='pip3 install '
+alias all-package-pip3='pip freeze'
+alias remove-package-pip3='pip3 uninstall '
+alias upgrade-package-pip3='pip3 install --upgrade '
+
+#######
+# node
+#######
+alias add-node='brew update && brew install node'

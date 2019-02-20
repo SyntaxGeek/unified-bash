@@ -1,0 +1,7 @@
+# scriptcs version manager
+. $HOME/.svm_profile
+
+for dev_file in ~/.developer_{paths,bash_prompt,exports,aliases,functions,extra}; do
+  [ -r "$dev_file" ] && source "$dev_file" # && echo "Processed '$dev_file'"
+done
+unset dev_file

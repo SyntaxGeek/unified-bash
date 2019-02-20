@@ -1,0 +1,111 @@
+# ---------------
+# readme
+# ---------------
+#
+#  .-----------------------------------------------------------------.
+#  | Describe the non-inuitive command prefixes below                |
+#  .-----------------------------------------------------------------.
+#  | command prefix | desc                                           |
+#  .----------------+------------------------------------------------.
+#  | show           | show output to stdout                          |
+#  | open           | open output for editing                        |
+#  | go             | move contextual position                       |
+#  | exec           | launch exes                                    |
+#  | remove         | uninstall/delete/remove                        |
+#  '----------------'------------------------------------------------'
+#
+# ---------------
+
+# ---------------
+# macOS mgmt
+# ---------------
+alias clean-os-launchSvcs="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+alias enable-os-fontSmoothing="defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO"
+alias disable-os-fontSmoothing="defaults write -g CGFontRenderingFontSmoothingDisabled -bool YES"
+alias exec-os-dockRestart="killall Dock"
+# ---------------
+# sys mgmt
+# ---------------
+alias show-sys-bashOpts='shopt'                                                   # show bash options
+alias show-sys-paths='echo -e ${PATH//:/\\n}'
+alias exec-sys-top="top -R -F -s 10 -o rsize"                                     # resource friendly top
+alias show-sys-highCpu='ps wwaxr -o pid,stat,%cpu,time,command | head -10'        # find high cpu utilizers
+alias show-sys-highMem='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'   # find high mem utilizers
+alias open-sys-hosts='sudo edit /etc/hosts'
+alias exec-sys-bashReload='. ~/.bash_profile && clear'
+
+show-sys-procs() { lsof -t -c "$@" ; }
+
+show-sys-info() {
+    echo -e "\nYou are logged on ${RED}$HOST"
+    echo -e "\nAdditionnal information:$NC " ; uname -a
+    echo -e "\n${RED}Users logged on:$NC " ; w -h
+    echo -e "\n${RED}Current date :$NC " ; date
+    echo -e "\n${RED}Machine stats :$NC " ; uptime
+    echo -e "\n${RED}Current network location :$NC " ; scselect
+    echo -e "\n${RED}Public facing IP Address :$NC " ; ip-net
+    #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
+    echo
+}
+
+show-sys-userProcs() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
+
+# ---------------
+# file mgmt
+# ---------------
+alias open-fs-dir='open -a Finder ./'                                             # open current dir in Finder
+alias go-fs-home='cd ~'
+alias go-fs-back='cd ../'
+alias go-fs-back2='cd ../../'
+alias go-fs-back3='cd ../../../'
+alias go-fs-back4='cd ../../../../'
+alias go-fs-back5='cd ../../../../../'
+alias go-fs-back6='cd ../../../../../../'
+alias cp='cp -iv'                                                           # safe cp
+alias copy-fs='cp -iv'                                                      # safe cp
+alias mv='mv -iv'                                                           # safe mv
+alias move-fs='mv -iv'                                                      # safe mv
+remove-fs-file() { command mv "$@" ~/.Trash ; }
+compress-fs-folder() { zip -r "$1".zip "$1" ; }
+
+if ls --color > /dev/null 2>&1; then # GNU `ls`                             # Detect which `ls` flavor is in use
+  colorflag="--color"
+else # OS X `ls`
+  colorflag="-G"
+fi
+
+alias show-fs-long='ls -lh'                                                 # List all files colorized in long format
+alias show-fs-allLong="ls -lha"                                            # List all files colorized in long format, including dot files
+alias show-fs-dir='ls -l | grep "^d"'                                       # List only directories
+alias show-fs="command ls ${colorflag}"                                     # Always use color output for `ls`
+
+export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
+
+# ----------------
+# networking
+# ----------------
+alias show-net-pubIp='dig +short myip.opendns.com @resolver1.opendns.com'
+alias show-net-openConnections='lsof -i'
+alias show-net-openPorts='sudo lsof -i | grep LISTEN'
+alias exec-net-flushDns='dscacheutil -flushcache'
+
+alias show-net-socks='sudo /usr/sbin/lsof -i -P'                          # Display open sockets
+alias show-net-udpSocks='sudo /usr/sbin/lsof -nP | grep UDP'              # Display only open UDP sockets
+alias show-net-tcpSocks='sudo /usr/sbin/lsof -nP | grep TCP'              # Display only open TCP sockets
+alias show-net-en0='ipconfig getpacket en0'                               # Get info on connections for en0
+alias show-net-en1='ipconfig getpacket en1'                               # Get info on connections for en1
+alias show-net-blocked='sudo ipfw list'                                   # All ipfw rules incoming blocked
+
+# ---------------
+# searching
+# ---------------
+alias show-fs-which='type --all'                                          # find all bins
+alias show-fs-filesNamed='find . -name '
+show-fs-filesWithMeta() { mdfind "kMDItemDisplayName == '$@'wc" ; }      # using spotlight, search meta for keyword
+
+# ---------------
+# stdout manipulation
+# ---------------
+alias show='echo'
+show-output-containing() { grep -i "$@" ; }
+show-output-notContaining() { grep -iv "$@" ; }
