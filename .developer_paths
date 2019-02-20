@@ -1,0 +1,16 @@
+paths=(
+    /usr/local/lib/python3.7/site-packages/ ,
+    /usr/local/share/npm/bin ,
+)
+
+for dir in ${paths[@]} ; do
+    if [ -d "$dir" ] ; then
+        PATH=$dir:$PATH
+        # echo "Processed '$dir'"
+    fi
+done
+
+export PATH
+
+unset dir
+unset paths
